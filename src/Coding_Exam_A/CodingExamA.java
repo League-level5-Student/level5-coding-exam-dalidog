@@ -29,27 +29,38 @@ public class CodingExamA {
 		colorofShapes = JOptionPane.showInputDialog("Which color would you like the shapes to be? (1) for red, (2) for blue, (3) for green");
 		numSides = Integer.parseInt(JOptionPane.showInputDialog("How many sides will each shape have?"));
 		
-//ArrayList <Thread> threadArray = new ArrayList<Thread>();
-		for(int i = 0; i<numRobots; i++) {
-			
-			Thread t = new Thread(()->{
-				Robot r = new Robot();
-				r.penDown();
-				if(colorofShapes.equals("1")) {
-					r.setPenColor(Color.RED);
-				}else if(colorofShapes.contentEquals("2")) {
-					r.setPenColor(Color.BLUE);
-				}else {
-					r.setPenColor(Color.GREEN);
-				}
-				for(int j = 0; j<numSides; j++) {
-					r.show();
-					r.move(100);
-					r.turn(360/numSides);
-				}
-			});
-			//threadArray.add(t);
-			t.start();
+ArrayList <Thread> threadArray = new ArrayList<Thread>();
+ArrayList <Robot> robotArray = new ArrayList<Robot>();
+int x = 25;
+int y = 25;
+for(int z = 0; z<numRobots; z++) {
+	x+=100;
+	y+=100;
+	robotArray.add(new Robot(x,y));
+	robotArray.get(z).penDown();
+	if(colorofShapes.equals("1")) {
+		robotArray.get(z).setPenColor(Color.RED);
+	}else if(colorofShapes.contentEquals("2")) {
+		robotArray.get(z).setPenColor(Color.BLUE);
+	}else {
+		robotArray.get(z).setPenColor(Color.GREEN);
+	}
+	robotArray.get(z).show();
+	
+	Robot r = robotArray.get(z);
+	threadArray.add(new Thread(()->{
+		for(int j = 0; j<numSides; j++) {
+			r.move(300/numSides);
+			r.turn(360/numSides);
 		}
+	}));
+}
+			
+		
+for(int k = 0; k<threadArray.size(); k++) {
+			threadArray.get(k).start();
+}
+		
+		
 	}
 }
